@@ -1,0 +1,41 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %} {{ category_detail.category_name }} {% endblock %}
+
+
+{% block content %}
+<div class="container m-auto"><input type="button" class="btn btn-light btn-outline-info" onclick="history.back();"
+                                     value="Назад"/></div>
+<br>
+<div>
+    <h2> Все посты из категории <q>{{ category_detail.category_name }}</q></h2>
+    <div>
+        <b>Желаете подписаться?</b>
+        {% if user_is_anonymous %}
+        <b>Пожалуйста, авторизуйтесь, чтобы подписаться на данную категорию новостей</b>
+        {% else %}
+        {% if is_subscribe %}
+        <button type="submit" value="" name="pk" class="btn btn-light btn-outline-danger"> Отписаться</button>
+        <b>Если больше не желаете получать уведомление о новых новостях, нажмите отписаться</b>
+        {% else %}
+        <b>Если хотите получать уведомления о новых новостях, вы можете подписаться на данную категорию</b>
+        <button type="submit" value="" name="pk" class="btn btn-light btn-outline-primary"> Подписаться</button>
+        {% endif %}
+        {% endif %}
+    </div>
+    <hr>
+    <div>
+        {% if category_detail %}
+        {% for post in category_news %}++++++
+        <strong> <a href="{{ post.get_absolute_url }}"> Заголовок: {{ post.headline|censor }} </a> </strong>
+        <p> Текст: {{ post.post_text|truncatewords:1|censor }} <strong> рейтинг: {{ post.post_rating }} </strong></p>
+        <q> Автор: {{ post.post_author }} ***** рейтинг автора: {{ post.post_author.author_rating }}</q>
+        <p>∗ {{ post.create_date|date:'d M Y h:i' }} ∗ </p>
+        <p><q>&lowast;&lowast;&lowast;</q></p>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}
